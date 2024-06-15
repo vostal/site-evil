@@ -1,0 +1,55 @@
+{% include "upper.html" %}
+<script type="text/javascript">
+	async function UPLOAD() {
+		let data = new FormData();
+
+		data.append("title", document.getElementById("track_title").value);
+		data.append("author", document.getElementById("track_author").value);
+		let value_input = document.getElementById("track_file").files;
+		if(!value_input.length) return false;
+
+		data.append("file", value_input[0]);
+
+		close = await fetch("{% url 'music:upload' %}", {
+			method: "POST",
+			credentials: "include",
+			headers: {
+				"X-CSRFToken": getCookie("csrftoken"),
+			},
+			mode: "same-origin",
+			body: data,
+		}).then((response) => response.json())
+		.then((response) => {
+			document.getElementById("output").innerHTML=response.message;
+			return true;
+		})
+		.catch((err) => {
+			console.log("Error on login and info_catch:",response);
+			return false;
+		})
+	}
+</script>
+<div class="dropdown_reg" id="output">
+	<form action="javascript:UPLOAD()" method="POST" accept-charset="UTF-8">
+		<h2>Добавить трек</h2>
+		<br>
+		<div class="input-box">
+			<input type="text" id="track_title" autocomplete="none" minlength="1" maxlength="64" value="" required>
+			<label for="track_title">Название</label>
+		</div>
+		<br>
+		<div class="input-box">
+			<input type="text" id="track_author" autocomplete="none" minlength="1" maxlength="64" value="" required>
+			<label for="track_author">Автор</label>
+		</div>
+		<br>
+		<div class="input-box">
+			<label for="track_file" style="top: -2vh;">Файл</label>
+			<input type="file" accept=".mp3" id="track_file" required>
+		</div>
+		<br>
+		<input type="submit" value="Добавить" class="login-btn">
+	</form>
+</div>
+<!-- class="input-box-checkbox"-->
+{% include "lower.html" %}

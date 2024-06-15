@@ -1,0 +1,79 @@
+{% include "upper.html" %}
+<script type="text/javascript">
+	function REGISTER() {
+		$.ajax({
+			url: "{% url 'accounts:accounts_register' %}",
+			type: "POST",
+			beforeSend: function(request) {
+				request.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+			},
+			mode: "same-origin",
+			data: {
+					"name": document.getElementById("reg_name").value,
+					"lastname": document.getElementById("reg_lastname").value,
+					"login": document.getElementById("reg_login").value,
+					"email": document.getElementById("reg_email").value,
+					"password": document.getElementById("reg_password").value,
+					"birth_date": document.getElementById("reg_birth_date").value
+				},
+			dataType: "json",
+			success: function(response) {
+				document.getElementById("output").innerHTML=response.message;
+			},
+			error: function(response) {
+				console.log("Error on login and info_catch:",response);
+			}
+		});
+	}
+</script>
+<div class="dropdown_reg" id="output">
+	<form action="javascript:REGISTER()" method="POST" accept-charset="UTF-8">
+		<h2>Регистрация</h2>
+		<br>
+		<div class="input-box">
+			<input type="text" id="reg_name" autocomplete="name" minlength="2" maxlength="64" value="" required>
+			<label for="reg_name">Имя</label>
+		</div>
+		<br>
+		<div class="input-box">
+			<input type="text" id="reg_lastname" autocomplete="family-name" minlength="2" maxlength="64" value="" required>
+			<label for="reg_lastname">Фамилия</label>
+		</div>
+		<br>
+		<div class="input-box">
+			<input type="text" id="reg_login" minlength="2" autocomplete="username" maxlength="64" value="" required>
+			<label for="reg_login">Логин</label>
+		</div>
+		<br>
+		<div class="input-box">
+			<span class="icon"><ion-icon name="mail"></ion-icon></span>
+			<input type="text" id="reg_email" autocomplete="email" minlength="2" maxlength="127" value="" required>
+			<label for="reg_email">Email</label>
+		</div>
+		<br>
+		<div class="input-box">
+			<span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+			<input type="password" id="reg_password" autocomplete="new-password" minlength="12" maxlength="255" value="" required>
+			<label for="reg_password">Пароль</label>
+		</div>
+		<br>
+		<div class="input-box" style="border: none;">
+			<label for="reg_birth_date" style="top: -2vh;">Дата рождения</label>
+			<input type="date" id="reg_birth_date" autocomplete="bday" required>
+		</div>
+		<div class="reg_gender_style">
+			<label for="reg_gender" style="font-size: 2em; font-weight: 400;">Пол:</label>
+			<br>
+			<input type="radio" id="reg_gender" name="reg_gender" value="Мужчина" checked>
+			<label for="reg_gender" style="font-size: 1.6em;">Мужчина</label>
+			<br>
+			<input type="radio" id="Femail" name="reg_gender" value="Женщина">
+			<label for="Femail" style="font-size: 1.6em;">Женщина</label>
+			<br>
+		</div>
+		<br>
+		<input type="submit" value="Создать аккаунт" class="login-btn">
+	</form>
+</div>
+<!-- class="input-box-checkbox"-->
+{% include "lower.html" %}
